@@ -27,13 +27,12 @@ raw_data = json.loads(url_request.text)
 #print(type(raw_data))
 #print(raw_data.keys())
 
-liste_id = [] #là ou je vais les stockés pour pouvoir les transformer en CSV par la suite 
-liste_links = []
+liste_links = [] #là ou je vais les stockés pour pouvoir les transformer en CSV par la suite 
+liste_id = [] 
+liste_names = []
 
 #Trouver mes STOP_AREAS
 areas = raw_data['stop_areas']
-
-area = areas[1] # je vois qu'il existe, faire une boucle pour savoir si "id" existe dans mes autres liste 
 
 for loop_area in areas : 
     if type(loop_area) == dict :
@@ -67,13 +66,23 @@ for loop_link in my_links:
     else: 
         print("Unexpected format: %s", s(type(loop_link)))        
 
-print(len(liste_links))
-print(liste_links)
+#print(len(liste_links))
+#print(liste_links)
 
 
+#Trouver mes noms (je suis dans stop_area)
 
+for loop_name in areas :
+    if type(loop_name) == dict: 
+        if "label" in loop_name.keys():
+            local_name = loop_name["label"]
+            liste_names.append(local_name)
+        else: 
+            print("Missing key in the list")
+    else: 
+        print("Unexpected format: %s ", s(type(loop_name)))
 
-
+print(liste_names)
 
 
 ''' Faire un fichier log'''
