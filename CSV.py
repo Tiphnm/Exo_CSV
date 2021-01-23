@@ -30,8 +30,10 @@ raw_data = json.loads(url_request.text)
 liste_links = [] #là ou je vais les stockés pour pouvoir les transformer en CSV par la suite 
 liste_id = [] 
 liste_names = []
+liste_coord = []
 
-#Trouver mes STOP_AREAS
+
+#MES IDS 
 areas = raw_data['stop_areas']
 
 for loop_area in areas : 
@@ -50,7 +52,7 @@ for loop_area in areas :
 #print(liste_id)
 #print(area.keys())
 
-#Trouver mes LINKS
+#MES LINKS
 
 my_links = raw_data['links']
 my_link = my_links[0]
@@ -70,7 +72,7 @@ for loop_link in my_links:
 #print(liste_links)
 
 
-#Trouver mes noms (je suis dans stop_area)
+#MES NOMS 
 
 for loop_name in areas :
     if type(loop_name) == dict: 
@@ -82,7 +84,21 @@ for loop_name in areas :
     else: 
         print("Unexpected format: %s ", s(type(loop_name)))
 
-print(liste_names)
+#print(liste_names)
 
+#MES COORDONNEES 
 
-''' Faire un fichier log'''
+for loop_coord in areas: 
+    if type(loop_coord) == dict: 
+        if "coord" in loop_coord.keys(): 
+            local_coord = loop_coord["coord"]
+            liste_coord.append(local_coord)
+        else: 
+            print("Missing key in the list")
+    else: 
+        print("Unexpected type")
+
+print(len(liste_coord))
+
+for elem in liste_coord: 
+    print(elem)
