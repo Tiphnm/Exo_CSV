@@ -99,10 +99,18 @@ for loop_coord in areas:
     else: 
         print("Unexpected type")
 
-print(liste_coord)
+#print(liste_coord)
 
-#TRANSFORMATION EN CSV 
+#TRANSFORMATION EN CSV de mes liens 
 
 df = pd.DataFrame(liste_links)  
     
 df.to_csv('Mes_liens.csv') 
+
+#TRANSFORMATION EN CSV de mes names et coord 
+
+dict = {'ID': liste_id, 'NAME': liste_names, 'COORD': liste_coord}
+
+df= pd.DataFrame(dict)
+
+df.to_csv('Mon_csv.csv')
