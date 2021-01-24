@@ -1,0 +1,12 @@
+,0
+0,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}
+1,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/route_schedules
+2,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/stop_schedules
+3,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/arrivals
+4,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/departures
+5,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/places_nearby
+6,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/journeys
+7,https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_areas.id}/traffic_reports
+8,https://api.sncf.com/v1/coverage/sncf/stop_areas?start_page=1
+9,https://api.sncf.com/v1/coverage/sncf/stop_areas?start_page=171
+10,https://api.sncf.com/v1/coverage/sncf/stop_areas
