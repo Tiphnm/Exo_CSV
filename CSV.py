@@ -4,6 +4,7 @@
 import pprint
 import json
 import requests
+import pandas as pd
 
 json_data = None
 
@@ -98,7 +99,10 @@ for loop_coord in areas:
     else: 
         print("Unexpected type")
 
-print(len(liste_coord))
+print(liste_coord)
 
-for elem in liste_coord: 
-    print(elem)
+#TRANSFORMATION EN CSV 
+
+df = pd.DataFrame(liste_links)  
+    
+df.to_csv('Mes_liens.csv') 
