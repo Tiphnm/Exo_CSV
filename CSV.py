@@ -12,9 +12,9 @@ json_file = 'stop_areas.json'
 with open(json_file) as json_data:     
     data = json.load(json_data)
 
-pprint.pprint(data)
-print(type(data))
-print(data.keys())
+#pprint.pprint(data)
+#print(type(data))
+#print(data.keys())
 
 
 '''partie request'''
@@ -114,3 +114,26 @@ dict = {'ID': liste_id, 'NAME': liste_names, 'COORD': liste_coord}
 df= pd.DataFrame(dict)
 
 df.to_csv('Mon_csv.csv')
+
+#Trouver toutes les gares entre Paris- Gare de Lyon et Lyon- Gare Lyon Perrache 
+
+station_paris_lyon = []
+
+url_lyon = "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:OCE:SA:87686006&to=stop_area:OCE:SA:87722025"
+headers = {"Authorization": "0157b284-3cc3-4799-a1ab-79dc2761d274"}
+url_stop_request = requests.get(url = url_lyon, headers=headers)
+stop_raw_data = json.loads(url_stop_request.text)
+
+#pprint.pprint(stop_raw_data)
+#print(url_stop_request.json())
+#print(type(stop_raw_data)) # a dict
+
+print(stop_raw_data.keys())
+
+stations = stop_raw_data["journeys"]
+
+for station in stations :
+    nbr_station = station["arrival_date_time"]
+    print(len(nbr_station)) #j'ai donc 15 stations 
+    
+''' Entre Paris Gare de Lyon et Lyon- Gare Perrache il y a 15 stations'''
