@@ -44,17 +44,34 @@ stops = section_name["stop_date_times"]
 nbr_stations = len(stops) - 2
 print(nbr_stations)
 
+#avoir toutes mes stations dans une liste 
 for stop in stops:
     if "stop_point" in stop.keys(): 
         name_station = stop["stop_point"]["label"]
         station_paris_lyon.append(name_station)
+        print(stop.keys()) # mes clés de chaque stations entre Paris et Gare de Lyon 'stop_point', 'links', 'arrival_date_time', 'additional_informations', 'departure_date_time', 'base_arrival_date_time', 'base_departure_date_time']
 print(station_paris_lyon)
+
+#Durée d'attente entre chaque arrêt: arrival_date_tim - departure_date_time  > je reste dans ma stops liste 
+stations_arrival_time = []
+stations_departure_time = []
+
+for stop in stops: 
+    if "arrival_date_time" in stop.keys():
+        arrival = stop["arrival_date_time"]
+        stations_arrival_time.append(arrival)
+print(stations_arrival_time)
+
+for stop in stops: 
+    if "departure_date_time" in stop.keys():
+        departure = stop["departure_date_time"]
+        stations_departure_time.append(departure)
+print(stations_departure_time)
+
 
 
 '''first_station = stops[0]["stop_point"] 
 print(first_station["label"])'''
-
-
 
 
 '''<class 'str'> status
