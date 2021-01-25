@@ -5,6 +5,7 @@ import pprint
 import json
 import requests
 import pandas as pd
+import datetime
 
 station_paris_lyon = []
 
@@ -49,24 +50,24 @@ for stop in stops:
     if "stop_point" in stop.keys(): 
         name_station = stop["stop_point"]["label"]
         station_paris_lyon.append(name_station)
-        print(stop.keys()) # mes clés de chaque stations entre Paris et Gare de Lyon 'stop_point', 'links', 'arrival_date_time', 'additional_informations', 'departure_date_time', 'base_arrival_date_time', 'base_departure_date_time']
-print(station_paris_lyon)
+        #print(stop.keys()) # mes clés de chaque stations entre Paris et Gare de Lyon 'stop_point', 'links', 'arrival_date_time', 'additional_informations', 'departure_date_time', 'base_arrival_date_time', 'base_departure_date_time']
+        print(station_paris_lyon)
 
-#Durée d'attente entre chaque arrêt: arrival_date_tim - departure_date_time  > je reste dans ma stops liste 
-stations_arrival_time = []
-stations_departure_time = []
+    if "base_arrival_date_time" in stop.keys():
+        arrival = stop["base_arrival_date_time"]
+        arrival_time = datetime.datetime.strptime(arrival, "%Y%m%dT%H%M%S")
+        #print(arrival_time)
 
-for stop in stops: 
-    if "arrival_date_time" in stop.keys():
-        arrival = stop["arrival_date_time"]
-        stations_arrival_time.append(arrival)
-print(stations_arrival_time)
+    if "base_departure_date_time" in stop.keys():
+        departure = stop["base_departure_date_time"]
+        departure_time = datetime.datetime.strptime(departure,"%Y%m%dT%H%M%S")
+        #print(departure_time)
 
-for stop in stops: 
-    if "departure_date_time" in stop.keys():
-        departure = stop["departure_date_time"]
-        stations_departure_time.append(departure)
-print(stations_departure_time)
+#Je soustrais chaque index de ma liste des arrival avec elle des departure et je convertis en heures https://openclassrooms.com/forum/sujet/soustraire-deux-dates-pour-recuperer-temps-restant
+
+    stop_time = (departure_time - arrival_time)
+    print(stop_time)
+        
 
 
 
