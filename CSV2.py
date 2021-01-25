@@ -23,37 +23,38 @@ journeys = stop_raw_data["journeys"]
 
 #pprint.pprint(journeys) 
 
-print(type(journeys))#c'est une liste
+#print(type(journeys))#c'est une liste
 
 '''for journey in journeys[0].keys(): 
     print(type(journeys[0][journey]), journey)'''
 
 my_sections = journeys[0]["sections"] #pour aller dans mon element sections dans ma liste Journeys, section est un dictionnaire
-print(type(my_sections)) # my_section est une list
+#print(type(my_sections)) # my_section est une list
 
 '''for section in my_sections: 
     print(type(section), section) #ici chaque élement de ma liste my_sections est un dictionnaire '''
 
 section_name = my_sections[1] #from', 'links', 'arrival_date_time', 'additional_informations', 'co2_emission', 'display_informations', 'to', 'base_arrival_date_time', 'base_departure_date_time', 'departure_date_time', 'geojson', 'duration', 'type', 'id', 'data_freshness', 'stop_date_times'
 
-pprint.pprint(section_name["stop_date_times"]) #stop_date_time est une liste 
+#pprint.pprint(section_name["stop_date_times"]) #stop_date_time est une liste 
 
 stops = section_name["stop_date_times"]
 
-#le nombre de stations que j'ai 
+#le nombre de stations que j'ai -2 car ils comptabilisent toutes mes gares et je ne veux pas celle de départ ni celle d'arrivée 
 nbr_stations = len(stops) - 2
 print(nbr_stations)
 
+for stop in stops:
+    if "stop_point" in stop.keys(): 
+        name_station = stop["stop_point"]["label"]
+        station_paris_lyon.append(name_station)
+print(station_paris_lyon)
 
 
-'''for stop in stops: 
-    print(type(stop), stop) '''
+'''first_station = stops[0]["stop_point"] 
+print(first_station["label"])'''
 
 
-'''for element in my_sections[1].keys(): 
-    print(type(my_sections[1][element]), element) #sections est donc une liste de 3 dictionnaires'''#ici je chercher les clés d'un des trois dictionnaires, avec l'indexe 1 je suis dans mon deuxième dictionnaire 
-    
-    
 
 
 '''<class 'str'> status
