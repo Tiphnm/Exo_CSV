@@ -80,7 +80,6 @@ class ReadingSncfApi():
         #print(len(liste_id))
         #print(self.liste_id)
         #print(area.keys())
-        return self.liste_id
 
     #MES NOMS 
     def my_name(self, key_name):
@@ -97,7 +96,6 @@ class ReadingSncfApi():
                 print("Unexpected format: %s ", s(type(loop_name)))
 
         #print(self.liste_names)
-        return self.liste_names
 
     #MES COORDONNEES 
     def my_coord(self, key_name):
@@ -113,28 +111,21 @@ class ReadingSncfApi():
             else: 
                 print("Unexpected type")
 
-        print(self.liste_coord)
-        return self.liste_coord
+        #print(self.liste_coord)
 
-'''
+
     #TRANSFORMATION EN CSV de mes names et coord 
 
-    def csv_convert_info(liste1, liste2, liste3):
-        my_dict = {'ID': liste1, 'NAME': liste2, 'COORD': liste3}
-        print("This my list", liste1)
+    def csv_convert_info(self, file_name): # mes listes sont dans le init, pas besoin de les mettre en argument
+        my_dict = {'ID': self.liste_id, 'NAME': self.liste_names, 'COORD': self.liste_coord}
 
         df= pd.DataFrame(my_dict)
 
-        df.to_csv('Mon_csv.csv')
+        df.to_csv(file_name) #'Mon_csv.csv'       
 
-        return csv_convert_info
-
-    def_csv_convert_info = csv_convert_info(liste_id, liste_names, liste_coord)
-
-        #faire une fonction pour chaque key 
-        #faire une fonction qui prend toutes mes fonctions key pour créer un dictionnaire 
-        #faire une fonction avec ces deux fonctions pour créer des fichiers CSV 
-'''
 my_class = ReadingSncfApi() #j'instancie pour pouvoir appeler une fonction de ma classe plus proprement 
 my_class.read_links("stop_areas_tiph.json")
+my_class.my_id('id')
+my_class.my_name('label')
 my_class.my_coord('coord') #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
+my_class.csv_convert_info('Mon_csv.csv')
