@@ -17,6 +17,8 @@ class ReadingSncfApi():
         self.raw = None
         self.liste_links = []
         self.liste_id = []
+        self.liste_names = []
+
 
     def read_json(self, file_name):
         self.json_file = file_name #stop_areas.json'
@@ -80,27 +82,24 @@ class ReadingSncfApi():
         #print(area.keys())
         return self.liste_id
 
-'''
     #MES NOMS 
-    def my_name(key_name):
+    def my_name(self, key_name):
         #key_name= 'label'
-        liste_names = []
 
-        for loop_name in areas :
+        for loop_name in self.raw['stop_areas'] :
             if type(loop_name) == dict: 
                 if key_name in loop_name.keys():
                     local_name = loop_name[key_name]
-                    liste_names.append(local_name)
+                    self.liste_names.append(local_name)
                 else: 
                     print("Missing key in the list")
             else: 
                 print("Unexpected format: %s ", s(type(loop_name)))
 
-        #print(liste_names)
-        return liste_names
+        print(self.liste_names)
+        return self.liste_names
 
-    liste_names = my_name('label')
-
+'''
     #MES COORDONNEES 
     def my_coord(key_name):
         #key_name = 'coord'
@@ -141,4 +140,4 @@ class ReadingSncfApi():
 '''
 my_class = ReadingSncfApi() #j'instancie pour pouvoir appeler une fonction de ma classe plus proprement 
 my_class.read_links("stop_areas_tiph.json")
-my_class.my_id("id") #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
+my_class.my_name("label") #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
