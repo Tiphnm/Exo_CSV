@@ -5,20 +5,27 @@ import pprint
 import json
 import requests
 import pandas as pd
+import datetime
 
 class ReadingSncfApi(): 
     def __init__(self): 
         self.URL = "https://api.sncf.com/v1/coverage/sncf/stop_areas"
+        self.url_lyon = "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:OCE:SA:87686006&to=stop_area:OCE:SA:87722025"
         self.headers = {"Authorization": "0157b284-3cc3-4799-a1ab-79dc2761d274"}
         self.raw_data = None 
         self.json_data = None
         self.data = None
+        self.lyon_url_request = None
         self.url_request = None
         self.raw = None
         self.liste_links = []
         self.liste_id = []
         self.liste_names = []
         self.liste_coord = []
+        self.station_paris_lyon = []
+
+        #rajouter mon file_name dans le init car je l'utilise en général 
+        #pareil pour le json.file
 
     def read_json(self, file_name):
         self.json_file = file_name #stop_areas.json'
@@ -38,7 +45,7 @@ class ReadingSncfApi():
             json.dump(self.url_request.json(), file)
             #retourne rien, juste pour sauvegarder le json
 
- #   def_write_json = write_json()
+#   def_write_json = write_json()
 
     def read_links(self, file_name): # enregistre mes liens 
         with open(file_name) as json_stop_areas_file: #"stop_areas_tiph.json"
@@ -122,10 +129,20 @@ class ReadingSncfApi():
         df= pd.DataFrame(my_dict)
 
         df.to_csv(file_name) #'Mon_csv.csv'       
+    
+    #################################################PARTIE LYON#######################
+
+    def lyon_read_json(self):
+        self.lyon_url_request = requests.get(url = self.url_lyon, headers= self.headers)
+        self.lyon_raw_data = json.loads(self.lyon_url_request.text)
+        #pprint.pprint(self.lyon_raw_data)
+
+
 
 my_class = ReadingSncfApi() #j'instancie pour pouvoir appeler une fonction de ma classe plus proprement 
-my_class.read_links("stop_areas_tiph.json")
-my_class.my_id('id')
-my_class.my_name('label')
-my_class.my_coord('coord') #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
-my_class.csv_convert_info('Mon_csv.csv')
+#my_class.read_links("stop_areas_tiph.json")
+#my_class.my_id('id')
+#my_class.my_name('label')
+#my_class.my_coord('coord') #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
+#my_class.csv_convert_info('Mon_csv.csv')
+my_class.lyon_read_json()
