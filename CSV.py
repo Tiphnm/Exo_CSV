@@ -10,19 +10,20 @@ import datetime
 class ReadingSncfApi(): 
     def __init__(self): 
         self.URL = "https://api.sncf.com/v1/coverage/sncf/stop_areas"
-        self.url_lyon = "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:OCE:SA:87686006&to=stop_area:OCE:SA:87722025"
         self.headers = {"Authorization": "0157b284-3cc3-4799-a1ab-79dc2761d274"}
         self.raw_data = None 
         self.json_data = None
-        self.data = None
-        self.lyon_url_request = None
+        self.data = None       
         self.url_request = None
         self.raw = None
         self.liste_links = []
         self.liste_id = []
         self.liste_names = []
         self.liste_coord = []
+        self.url_lyon = "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:OCE:SA:87686006&to=stop_area:OCE:SA:87722025"
+        self.lyon_url_request = None
         self.station_paris_lyon = []
+        self.stops = None
 
         #rajouter mon file_name dans le init car je l'utilise en général 
         #pareil pour le json.file
@@ -130,14 +131,43 @@ class ReadingSncfApi():
 
         df.to_csv(file_name) #'Mon_csv.csv'       
     
-    #################################################PARTIE LYON#######################
+    #################################################PARTIE LYON#################################################
 
     def lyon_read_json(self):
         self.lyon_url_request = requests.get(url = self.url_lyon, headers= self.headers)
         self.lyon_raw_data = json.loads(self.lyon_url_request.text)
         #pprint.pprint(self.lyon_raw_data)
 
+    def number_station(self): 
+        journeys = self.lyon_raw_data["journeys"]
+        my_sections = journeys[0]["sections"]
+        section_name = my_sections[1]
+        self.stops = section_name["stop_date_times"]
+        nbr_stations = len(self.stops) - 2
+        print(nbr_stations)
+    
+    def stops_name(self):
+        for stop in self.stops:
+            if "stop_point" in stop.keys(): 
+                name_station = stop["stop_point"]["label"]
+                self.station_paris_lyon.append(name_station)
+                #print(stop.keys()) # mes clés de chaque stations entre Paris et Gare de Lyon 'stop_point', 'links', 'arrival_date_time', 'additional_informations', 'departure_date_time', 'base_arrival_date_time', 'base_departure_date_time']
+        #print(self.station_paris_lyon)
+    
+    def stops_waiting_time(self): 
+        for stop in self.stops: 
+            if "base_arrival_date_time" in stop.keys():
+                arrival = stop["base_arrival_date_time"]
+                arrival_time = datetime.datetime.strptime(arrival, "%Y%m%dT%H%M%S")
+                #print(arrival_time)
 
+            if "base_departure_date_time" in stop.keys():
+                departure = stop["base_departure_date_time"]
+                departure_time = datetime.datetime.strptime(departure,"%Y%m%dT%H%M%S")
+                #print(departure_time)
+        
+            stop_time = (departure_time - arrival_time)
+            print(stop_time)
 
 my_class = ReadingSncfApi() #j'instancie pour pouvoir appeler une fonction de ma classe plus proprement 
 #my_class.read_links("stop_areas_tiph.json")
@@ -146,3 +176,6 @@ my_class = ReadingSncfApi() #j'instancie pour pouvoir appeler une fonction de ma
 #my_class.my_coord('coord') #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
 #my_class.csv_convert_info('Mon_csv.csv')
 my_class.lyon_read_json()
+my_class.number_station()
+my_class.stops_name()
+my_class.stops_waiting_time()
