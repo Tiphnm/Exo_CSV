@@ -64,8 +64,14 @@ class Testing_reading_json(unittest.TestCase):
             my_boolean = (len(testClass.liste_id) > 0) and (len(testClass.liste_names) >0) and (len(testClass.liste_coord)> 0)
             self.assertTrue(my_boolean)
             self.assertTrue(os.path.exists('mon_csv.csv'))
+        
+        def test_stop_station_list(self): 
+            testClass = ReadingSncfApi()
+            testClass.lyon_read_json()
+            testClass.number_station()
+            testClass.stops_name()
+            self.assertTrue(len(testClass.station_paris_lyon) > 0)
 
-            #compiler existence des 3 listes
 
 if __name__ == '__main__':
     unittest.main(verbosity =0)
