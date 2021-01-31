@@ -6,6 +6,13 @@ import json
 import requests
 import pandas as pd
 import datetime
+import logging 
+
+logging.basicConfig(filename='loggings.log', level=logging.INFO,
+                    format='%(asctime)s: %(name)s :%(levelname)s:%(message)s')
+
+logging.info('This is an info:')
+logging.error('This is an error:')
 
 class ReadingSncfApi(): 
     def __init__(self): 
@@ -27,30 +34,37 @@ class ReadingSncfApi():
 
         #rajouter mon file_name dans le init car je l'utilise en général 
         #pareil pour le json.file
-
+    logging.info("Reading my json file : start")     
     def read_json(self, file_name):
+
         self.json_file = file_name #stop_areas.json'
         with open(self.json_file, "r") as json_data:     
             self.data = json.load(json_data)
 
-        #pprint.pprint(self.data)
+        pprint.pprint(self.data)
+    logging.info("Reading my json file : end")
+
         #print(type(data))
         #print(data.keys())
 
 #l'executer dans un autre fichier ou teste en dehors de ma classe
 #    read_json('stop_areas.json')# appeler ma fonction avec le nom de mon 'jsonfile' 
-
+    
+    logging.info("Reading my json file, only stop_areas : start")     
     def write_json(self, file_name):#crée mon fichier json uniquement de mes "stop_areas"
         self.url_request = requests.get(url = self.URL, headers= self.headers)
         with open(file_name, mode = "w") as file : #mon nom de fichie est "stop_areas_tiph.json"
             json.dump(self.url_request.json(), file)
             #retourne rien, juste pour sauvegarder le json
 
-#   def_write_json = write_json()
+    logging.info("Reading my json file, only stop_areas : end")     
 
     def read_links(self, file_name): # enregistre mes liens 
         with open(file_name) as json_stop_areas_file: #"stop_areas_tiph.json"
             self.raw = json.load(json_stop_areas_file) #pas besoin de s car mon fichier est déjà convertis en text dans ma fonction précédente
+   
+
+    logging.info("Saving all my links : start")     
 
     def loop_links(self, dict_key): # reads and saves json
 
@@ -66,9 +80,13 @@ class ReadingSncfApi():
 
         #print(type(liste_links))             
         return self.liste_links
-    
+
+    logging.info("Saving all my links : end")     
+
 
     #MES IDS 
+
+    logging.info("Saving all my stops's ID in a list : start")     
 
     def my_id(self, key_name) : 
         #key_name = "id"
@@ -86,10 +104,15 @@ class ReadingSncfApi():
         #print(area['id'])
         #print(type(area), area)
         #print(len(liste_id))
-        #print(self.liste_id)
+        print(self.liste_id)
         #print(area.keys())
 
+    logging.info("Saving all my stops's ID in a list : end")     
+
     #MES NOMS 
+
+    logging.info("Saving all my stops's names in a list : start")     
+
     def my_name(self, key_name):
         #key_name= 'label'
 
@@ -103,9 +126,15 @@ class ReadingSncfApi():
             else: 
                 print("Unexpected format: %s ", s(type(loop_name)))
 
-        #print(self.liste_names)
+        print(self.liste_names)
+
+    logging.info("Saving all my stops's names in a list : end")     
+
 
     #MES COORDONNEES 
+
+    logging.info("Saving all my stops's coord in a list : start")     
+
     def my_coord(self, key_name):
         #key_name = 'coord'
         
@@ -119,24 +148,37 @@ class ReadingSncfApi():
             else: 
                 print("Unexpected type")
 
-        #print(self.liste_coord)
+        print(self.liste_coord)
 
+    logging.info("Saving all my stops's coord in a list : end")     
 
     #TRANSFORMATION EN CSV de mes names et coord 
+
+    logging.info("Saving all my lists in a CSV file: start")     
 
     def csv_convert_info(self, file_name): # mes listes sont dans le init, pas besoin de les mettre en argument
         my_dict = {'ID': self.liste_id, 'NAME': self.liste_names, 'COORD': self.liste_coord}
 
         df= pd.DataFrame(my_dict)
 
-        df.to_csv(file_name) #'Mon_csv.csv'       
+        df.to_csv(file_name) #'Mon_csv.csv'   
+
+    logging.info("Saving all my lists in a CSV file: end")     
+    
     
     #################################################PARTIE LYON#################################################
+
+    logging.info("Reading my file on Lyon in json : start")     
 
     def lyon_read_json(self):
         self.lyon_url_request = requests.get(url = self.url_lyon, headers= self.headers)
         self.lyon_raw_data = json.loads(self.lyon_url_request.text)
         #pprint.pprint(self.lyon_raw_data)
+
+    logging.info("Reading my file on Lyon in json : end")     
+
+
+    logging.info("Counting the number of station bewteen Paris and Lyon: start")     
 
     def number_station(self): 
         journeys = self.lyon_raw_data["journeys"]
@@ -145,15 +187,24 @@ class ReadingSncfApi():
         self.stops = section_name["stop_date_times"]
         nbr_stations = len(self.stops) - 2
         print(nbr_stations)
+
+    logging.info("Counting the number of station bewteen Paris and Lyon: end")     
     
+    logging.info("Saving the list of my stations' names : start")     
+
     def stops_name(self):
         for stop in self.stops:
             if "stop_point" in stop.keys(): 
                 name_station = stop["stop_point"]["label"]
                 self.station_paris_lyon.append(name_station)
                 #print(stop.keys()) # mes clés de chaque stations entre Paris et Gare de Lyon 'stop_point', 'links', 'arrival_date_time', 'additional_informations', 'departure_date_time', 'base_arrival_date_time', 'base_departure_date_time']
-        #print(self.station_paris_lyon)
+        print(self.station_paris_lyon)
     
+    logging.info("Saving the list of my stations' names : end")     
+
+    
+    logging.info("Calculating delta of time between arrivals and departures: start")     
+
     def stops_waiting_time(self): 
         for stop in self.stops: 
             if "base_arrival_date_time" in stop.keys():
@@ -169,13 +220,15 @@ class ReadingSncfApi():
             stop_time = (departure_time - arrival_time)
             print(stop_time)
 
+    logging.info("Calculating delta of time between arrivals and departures: ends")     
+
 my_class = ReadingSncfApi() #j'instancie pour pouvoir appeler une fonction de ma classe plus proprement 
 #my_class.read_links("stop_areas_tiph.json")
 #my_class.my_id('id')
 #my_class.my_name('label')
 #my_class.my_coord('coord') #je mets pas de self, je suis à l'extérieur de ma classe fonction, je mets dans mes parenthèses mon argument 
 #my_class.csv_convert_info('Mon_csv.csv')
-my_class.lyon_read_json()
-my_class.number_station()
-my_class.stops_name()
-my_class.stops_waiting_time()
+#my_class.lyon_read_json()
+#my_class.number_station()
+#my_class.stops_name()
+#my_class.stops_waiting_time()
