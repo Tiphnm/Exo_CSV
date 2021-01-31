@@ -1,0 +1,6 @@
+2021-01-31 15:17:35,160: root :INFO:This is an info:
+2021-01-31 15:17:35,160: root :ERROR:This is an error:
+2021-01-31 15:18:35,221: root :INFO:This is an info:
+2021-01-31 15:18:35,221: root :ERROR:This is an error:
+2021-01-31 15:18:35,221: root :INFO:Reading my json file : start
+2021-01-31 15:18:35,221: root :INFO:Reading my json file : end
